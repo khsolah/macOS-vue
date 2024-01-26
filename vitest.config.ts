@@ -1,14 +1,16 @@
 import path from 'path';
 import { defineConfig } from 'vitest/config';
 import Vue from '@vitejs/plugin-vue';
+import React from '@vitejs/plugin-react';
 import AutoImport from 'unplugin-auto-import/vite';
 
 export default defineConfig({
   plugins: [
     Vue(),
+    React(),
     AutoImport({
       imports: ['vue'],
-      packagePresets: ['pinia', '@vue/test-utils'],
+      packagePresets: ['pinia', '@vue/test-utils', '@vueuse/core'],
     }),
   ],
   test: {

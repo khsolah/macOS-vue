@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <Counter />
-    <CounterStore />
+    <Bar />
+    <Desktop />
   </div>
 </template>

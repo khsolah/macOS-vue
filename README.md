@@ -1,75 +1,31 @@
-# Nuxt 3 Minimal Starter
+# MacOS Vue
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This open-source project aims to reproduce MacOS on web.
 
-## Setup
+Preview: https://khsolah-mac-os-vue.vercel.app/
 
-Make sure to install the dependencies:
+## Stack
 
-```bash
-# npm
-npm install
+- Nuxt 3
+- Typescript
+- UnoCSS, SCSS
+- Pinia
+- Vitest
 
-# pnpm
-pnpm install
+## To-Do
 
-# yarn
-yarn install
+- [ ] Splash Screen
+- [ ] Nav
+- [ ] Dock
+- [ ] Desktop
+- [ ] Notification
+- [ ] Application
+  - [ ] Finder
+  - [ ] Calculator
+  - [ ] Notes
+  - [ ] Calendar
+  - [ ] Weather
 
-# bun
-bun install
-```
+## License
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+The MacOS name, trademark and artwork used in this project owned by Apple Inc. and is not affiliated with or endorsed by Apple Inc. The images are used under the principles of fair use and for non-commercial purposes only. All trademarks, service marks, trade names, and logos used in this project are the property of their respective owners. Use of these images does not imply endorsement of the project by Apple Inc. or any other entity.
