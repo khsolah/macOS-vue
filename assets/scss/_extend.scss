@@ -1,11 +1,11 @@
 %blurred-bg {
   &::before {
-    @apply content-[''] absolute top-0 right-0 left-0 bottom-0 bg-black/40 backdrop-blur-xl;
+    @apply bg-black/40 top-0 right-0 bottom-0 left-0 content-[''] absolute backdrop-blur-xl z--1;
   }
 }
 
 %frame {
-  @apply border-0.5 border-black border-solid rounded-md;
+  @apply border-black border-solid rounded-md border-0.5 z--1;
   box-shadow: inset 1px 0 1px 0 rgb(255 255 255 / 0.3),
     inset -1px 0 1px 0 rgb(255 255 255 / 0.3),
     inset 0 1px 1px 0 rgb(255 255 255 / 0.3),

@@ -113,8 +113,6 @@ const datetime = useDateFormat(useNow(), 'ddd MMM DD h:mm A', {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/extend';
-
 .nav {
   @extend %blurred-bg;
 }
