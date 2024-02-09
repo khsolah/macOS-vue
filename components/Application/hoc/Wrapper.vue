@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import type { EApplicationName } from '~/store/Application';
+import { EApplication, useApplicationStore } from '~/store/Application';
+
+const applicationStore = useApplicationStore();
 
 const props = defineProps<{
-  name?: EApplicationName;
+  id: string;
+  name?: EApplication;
   title?: string;
   width?: number;
   height?: number;
   nav?: Record<'close' | 'minimize' | 'fullscreen', { disabled: boolean }>;
+  zIndex: number;
 }>();
 const emit = defineEmits<{
   (e: 'close'): void;
@@ -34,10 +38,18 @@ const close = () => {
 };
 const minimize = () => {};
 const toggleFullScreen = () => {};
+const handleFocus = () => {
+  applicationStore.focus(props.id);
+};
 </script>
 
 <template>
-  <div ref="app" class="app" :style="[style]">
+  <div
+    ref="app"
+    class="app"
+    :style="[style, `z-index:${props.zIndex}`]"
+    @mousedown="handleFocus"
+  >
     <!-- nav -->
     <div class="px-3 py-2 relative flex">
       <div
@@ -79,7 +91,7 @@ const toggleFullScreen = () => {};
 
 <style lang="scss" scoped>
 .app {
-  @apply w-min h-min relative z-1 p-0.5;
+  @apply w-min h-min absolute z-1 p-0.5;
   @extend %blurred-bg;
   &::before {
     @apply rounded-xl;

@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { useDockStore } from './store/Dock';
+
+const dockStore = useDockStore();
+dockStore.init();
+</script>
+
 <template>
   <div>
     <NuxtPage />

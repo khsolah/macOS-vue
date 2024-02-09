@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { EApplicationName, useApplicationStore } from '~/store/Application';
+import { useApplicationStore } from '~/store/Application';
 
 const applicationStore = useApplicationStore();
 const handleClose = (name: string) => applicationStore.shutdown(name);
-
-onMounted(() => {
-  applicationStore.launch(EApplicationName.CALCULATOR);
-});
 </script>
 
 <template>
@@ -15,8 +11,9 @@ onMounted(() => {
     <component
       :is="application.component"
       v-for="application in applicationStore.applications"
+      :id="application.id"
       :key="application.id"
-      :uid="application.id"
+      :z-index="application.zIndex"
       @close="handleClose(application.id)"
     />
   </div>
