@@ -2,7 +2,7 @@
 import { useApplicationStore } from '~/store/Application';
 
 const applicationStore = useApplicationStore();
-const handleClose = (name: string) => applicationStore.shutdown(name);
+const handleClose = (id: string) => applicationStore.shutdown(id);
 </script>
 
 <template>

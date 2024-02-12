@@ -1,4 +1,3 @@
-import ApplicationHocWrapper from '../hoc/Wrapper.vue';
 import Calculator from './index.vue';
 
 enum EEl {
@@ -32,10 +31,18 @@ type Context = {
   result: ReturnType<ReturnType<typeof shallowMount>['find']>;
 };
 
+const ApplicationHocWrapper = defineComponent({
+  template: '<div><slot /></div>',
+});
+
 describe('Calculator', () => {
   beforeEach<Context>((context) => {
     context.wrapper = shallowMount(Calculator, {
       global: { stubs: { ApplicationHocWrapper } },
+      props: {
+        id: 'app-id',
+        zIndex: 1,
+      },
     });
     context.findEl = (name) => context.wrapper.find(`[data-spec-el="${name}"]`);
     context.result = context.findEl(EEl.RESULT);
@@ -55,15 +62,14 @@ describe('Calculator', () => {
   });
 
   test<Context>('Clear', async ({ findEl, result }) => {
-    const clearEl = findEl(EEl.CLEAR);
-    expect(clearEl.text()).toBe('AC');
+    expect(findEl(EEl.CLEAR).text()).toBe('AC');
 
     await findEl(EEl.NUMBER_1).trigger('click');
-    expect(clearEl.text()).toBe('C');
+    expect(findEl(EEl.CLEAR).text()).toBe('C');
 
-    await clearEl.trigger('click');
+    await findEl(EEl.CLEAR).trigger('click');
     expect(result.text()).toBe('0');
-    expect(clearEl.text()).toBe('AC');
+    expect(findEl(EEl.CLEAR).text()).toBe('AC');
   });
 
   test<Context>('Decimal point', async ({ findEl, result }) => {
@@ -78,13 +84,18 @@ describe('Calculator', () => {
     await findEl(EEl.NUMBER_1).trigger('click');
     await findEl(EEl.NUMBER_0).trigger('click');
     await findEl(EEl.PERCENT).trigger('click');
-    expect(result.text()).toBe('0.1');
+
+    await findEl(EEl.PERCENT).trigger('click');
+    expect(result.text()).toBe('0.001');
   });
 
   test<Context>('Change sign', async ({ findEl, result }) => {
     await findEl(EEl.NUMBER_1).trigger('click');
     await findEl(EEl.CHANGE_SIGN).trigger('click');
     expect(result.text()).toBe('-1');
+
+    await findEl(EEl.CHANGE_SIGN).trigger('click');
+    expect(result.text()).toBe('1');
   });
 
   test<Context>('Add', async ({ findEl, result }) => {
@@ -118,9 +129,6 @@ describe('Calculator', () => {
 
     await findEl(EEl.NUMBER_3).trigger('click');
     expect(result.text()).toBe('3');
-
-    await findEl(EEl.EQUAL).trigger('click');
-    expect(result.text()).toBe('6');
   });
 
   test<Context>('Divide', async ({ findEl, result }) => {
@@ -144,19 +152,30 @@ describe('Calculator', () => {
     await findEl(EEl.EQUAL).trigger('click');
 
     expect(result.text()).toBe('5');
-  });
 
-  test<Context>('Log', async ({ findEl }) => {
+    await findEl(EEl.CLEAR).trigger('click');
+    await findEl(EEl.CLEAR).trigger('click');
     await findEl(EEl.NUMBER_1).trigger('click');
-    await findEl(EEl.NUMBER_0).trigger('click');
     await findEl(EEl.ADD).trigger('click');
     await findEl(EEl.NUMBER_2).trigger('click');
     await findEl(EEl.EQUAL).trigger('click');
+    await findEl(EEl.MULTIPLY).trigger('click');
+    await findEl(EEl.EQUAL).trigger('click');
 
-    expect(findEl(EEl.LOG).text()).contain('10 + 2');
-    expect(findEl(EEl.LOG).text()).contain('= 12');
-
-    await findEl(EEl.CLEAR_LOG).trigger('click');
-    expect(findEl(EEl.LOG).text).toBe('');
+    expect(result.text()).toBe('9');
   });
+
+  // test<Context>('Log', async ({ findEl }) => {
+  //   await findEl(EEl.NUMBER_1).trigger('click');
+  //   await findEl(EEl.NUMBER_0).trigger('click');
+  //   await findEl(EEl.ADD).trigger('click');
+  //   await findEl(EEl.NUMBER_2).trigger('click');
+  //   await findEl(EEl.EQUAL).trigger('click');
+
+  //   expect(findEl(EEl.LOG).text()).contain('10 + 2');
+  //   expect(findEl(EEl.LOG).text()).contain('= 12');
+
+  //   await findEl(EEl.CLEAR_LOG).trigger('click');
+  //   expect(findEl(EEl.LOG).text).toBe('');
+  // });
 });

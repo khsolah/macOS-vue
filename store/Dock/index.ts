@@ -9,7 +9,7 @@ export type IDockApplication = {
   };
   href?: string;
   keep: boolean;
-  activeIds: string[];
+  active: boolean;
 };
 const APPLICATION_CONFIG = {
   [EApplication.FINDER]: {
@@ -18,7 +18,7 @@ const APPLICATION_CONFIG = {
       src: '/icons/finder.svg',
       alt: 'Finder',
     },
-    activeIds: [],
+    active: false,
     keep: true,
   },
   [EApplication.GITHUB]: {
@@ -28,7 +28,7 @@ const APPLICATION_CONFIG = {
       alt: 'Github',
     },
     href: 'https://github.com/khsolah/macOS-vue',
-    activeIds: [],
+    active: false,
     keep: true,
   },
   [EApplication.SAFARI]: {
@@ -37,7 +37,7 @@ const APPLICATION_CONFIG = {
       src: '/icons/safari.svg',
       alt: 'Safari',
     },
-    activeIds: [],
+    active: false,
     keep: true,
   },
   [EApplication.CALCULATOR]: {
@@ -46,7 +46,7 @@ const APPLICATION_CONFIG = {
       src: '/icons/calculator.webp',
       alt: 'Calculator',
     },
-    activeIds: [],
+    active: false,
     keep: true,
   },
 };
@@ -70,9 +70,8 @@ export const useDockStore = defineStore('Dock', () => {
   );
   const size = computed(
     () =>
-      Object.values(dock.value).filter(
-        ({ keep, activeIds }) => activeIds.length || keep,
-      ).length,
+      Object.values(dock.value).filter(({ keep, active }) => active || keep)
+        .length,
   );
   const keepSize = computed(
     () => Object.values(dock).filter(({ keep }) => keep).length,
@@ -82,26 +81,25 @@ export const useDockStore = defineStore('Dock', () => {
 
   const init = () => {
     for (const item of Object.values(dock.value)) {
-      item.activeIds.length = 0;
+      item.active = false;
     }
 
-    dock.value[EApplication.GITHUB]?.activeIds.push('');
+    dock.value[EApplication.GITHUB]!.active = true;
   };
 
-  const add = (application: EApplication, id: string) => {
-    if (dock.value[application]?.activeIds.length) {
-      dock.value[application]?.activeIds.push(id);
+  const add = (application: EApplication) => {
+    if (dock.value[application]?.active) {
       return;
     }
 
     dock.value[application] = APPLICATION_CONFIG[application];
-    dock.value[application]!.activeIds = [id];
+    dock.value[application]!.active = true;
   };
   const remove = (application: EApplication) => {
     const target = dock.value[application];
     if (!target) return;
 
-    target.activeIds.length = 0;
+    target.active = false;
     if (!target.keep) delete dock.value[application];
   };
 
@@ -119,7 +117,7 @@ export const useDockStore = defineStore('Dock', () => {
   const openApplication = (name: EApplication) => {
     if (!dock.value[name]) throw new Error(`Application ${name} is not exist!`);
 
-    if (dock.value[name]!.activeIds.length) {
+    if (dock.value[name]!.active) {
       applicationStore.focus(name);
       return;
     }

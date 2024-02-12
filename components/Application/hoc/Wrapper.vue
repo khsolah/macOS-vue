@@ -1,16 +1,24 @@
 <script setup lang="ts">
-import { EApplication, useApplicationStore } from '~/store/Application';
+import { useApplicationStore } from '~/store/Application';
 
 const applicationStore = useApplicationStore();
 
+type TNavOption = {
+  disabled: boolean;
+};
 const props = defineProps<{
   id: string;
-  name?: EApplication;
   title?: string;
   width?: number;
   height?: number;
-  nav?: Record<'close' | 'minimize' | 'fullscreen', { disabled: boolean }>;
+  top?: number;
+  left?: number;
   zIndex: number;
+  nav?: {
+    close?: TNavOption;
+    minimize?: TNavOption;
+    fullscreen?: TNavOption;
+  };
 }>();
 const emit = defineEmits<{
   (e: 'close'): void;
@@ -27,78 +35,88 @@ const { style } = useDraggable(app, {
 
     const windowSize = useWindowSize();
     return {
-      x: (windowSize.width.value - (props.width ?? 0)) / 2,
-      y: (windowSize.height.value - (props.height ?? 0)) / 2,
+      x: props.left ?? (windowSize.width.value - (props.width ?? 0)) / 2,
+      y: props.top ?? (windowSize.height.value - (props.height ?? 0)) / 2,
     };
   },
 });
 
+const zIndex = ref(props.zIndex);
 const close = () => {
   emit('close');
+  applicationStore.shutdown(props.id);
 };
 const minimize = () => {};
 const toggleFullScreen = () => {};
 const handleFocus = () => {
-  applicationStore.focus(props.id);
+  zIndex.value = applicationStore.focus(props.id);
 };
+const isFocusing = computed(() => applicationStore.focusing === props.id);
 </script>
 
 <template>
   <div
     ref="app"
     class="app"
-    :style="[style, `z-index:${props.zIndex}`]"
+    :style="[style, `z-index:${zIndex}`]"
     @mousedown="handleFocus"
   >
-    <!-- nav -->
-    <div class="px-3 py-2 relative flex">
-      <div
-        class="flex flex-shrink-0 text-transparent gap-1.5 hover:text-black/60"
-      >
+    <!-- buttons -->
+    <div class="flex h-7 p-2 top-0.5 absolute items-center">
+      <div class="app-nav__button-group">
         <button
-          class="app-nav__button bg-red-500"
-          :disabled="nav?.close.disabled"
+          class="app-nav__button"
+          :class="{ 'bg-red-500': isFocusing, 'bg-white/25': !isFocusing }"
+          :disabled="props.nav?.close?.disabled"
           @click="close"
         >
           <i class="i-mdi:close" />
         </button>
         <button
-          class="app-nav__button bg-yellow-500"
-          :disabled="nav?.minimize?.disabled"
+          class="app-nav__button"
+          :class="{ 'bg-yellow-500': isFocusing, 'bg-white/25': !isFocusing }"
+          :disabled="props.nav?.minimize?.disabled"
           @click="minimize"
         >
           <i class="i-mdi:minus" />
         </button>
         <button
-          class="app-nav__button bg-green-500"
-          :disabled="nav?.fullscreen?.disabled"
+          class="app-nav__button"
+          :class="{ 'bg-green-500': isFocusing, 'bg-white/25': !isFocusing }"
+          :disabled="props.nav?.fullscreen?.disabled"
           @click="toggleFullScreen"
         >
           T
         </button>
       </div>
-
-      <!-- title -->
-      <span>{{ props.title }}</span>
     </div>
 
     <!-- body -->
-    <div class="relative z-1 rounded-md overflow-hidden">
+    <div class="rounded-b-xl z-1 overflow-hidden">
       <slot />
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .app {
-  @apply w-min h-min absolute z-1 p-0.5;
+  @apply h-min w-min p-0.5 z-1 fixed overflow-hidden rounded-xl;
   @extend %blurred-bg;
   &::before {
     @apply rounded-xl;
     @extend %frame;
   }
 }
+.app-nav__button-group {
+  @apply flex flex-shrink-0 text-transparent gap-1.5;
+  &:hover {
+    > :not(:disabled) {
+      @apply text-black/60;
+    }
+  }
+}
 .app-nav__button {
-  @apply border-none rounded-full h-3 w-3 flex items-center justify-center text-inherit;
+  @apply border-none rounded-full flex h-3 text-inherit w-3 items-center justify-center;
+  @apply disabled:bg-white/25;
 }
 </style>

@@ -35,11 +35,14 @@ export const useApplicationStore = defineStore('Application', () => {
     >
   >({});
 
-  const focus = (id: string) => {
-    if (!applications.value[id] || focusing.value === id) return;
+  const focus = (id: string): number => {
+    if (focusing.value === id) return zIndex.value;
 
-    applications.value[id].zIndex = ++zIndex.value;
     focusing.value = id;
+    ++zIndex.value;
+    if (!applications.value[id]) return zIndex.value;
+
+    return (applications.value[id].zIndex = zIndex.value);
   };
 
   const launch = (name: EApplication) => {
@@ -50,21 +53,19 @@ export const useApplicationStore = defineStore('Application', () => {
       component: shallowRef(COMPONENT[name]),
       zIndex: ++zIndex.value,
     };
-    dockStore.add(name, id);
+    dockStore.add(name);
   };
 
   const shutdown = (id: string) => {
-    if (!applications.value[id])
-      throw new Error(`Application not found. (id: ${id})`);
+    if (!applications.value[id]) return;
 
-    const name = applications.value[id].name;
-    for (const activeId of dockStore.dock[name]!.activeIds)
-      delete applications.value[activeId];
-    dockStore.remove(name);
+    dockStore.remove(applications.value[id].name);
+    delete applications.value[id];
   };
 
   return {
     applications,
+    focusing,
     focus,
     launch,
     shutdown,

@@ -30,7 +30,7 @@ watch(
         v-for="(app, index) in Object.values(dockStore.dock)"
         :key="app.name"
         class="dock__app"
-        :class="{ 'dock__app--active': app.activeIds.length }"
+        :class="{ 'dock__app--active': app.active }"
         :style="{ left: `${index * 3.25 + 0.5}rem` }"
         @click="dockStore.openApplication(app.name)"
       >
@@ -78,6 +78,7 @@ $animation-timing-fn: cubic-bezier(0.55, 0, 0.1, 1);
   @apply m-auto h-16 text-white px-2 pb-1 z-1 translate-y-17;
   @apply right-0 bottom-1 left-0 fixed;
   @apply flex gap-3 justify-start items-center;
+  @apply translate-y-0;
   @extend %blurred-bg;
   transition: width 1s $animation-timing-fn, transform 250ms ease-in-out;
   &::before {
