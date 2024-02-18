@@ -1,4 +1,5 @@
-import DropDown, { EDropDownTrigger } from './index.tsx';
+import { EDropDownTrigger } from './types';
+import DropDown from './index';
 
 describe('DropDown', () => {
   test('render', () => {

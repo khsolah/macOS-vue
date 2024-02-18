@@ -12,16 +12,16 @@
     }
     &--left {
       top: 0;
-      right: calc(100% - 4px);
+      right: 100%;
     }
     &--right {
       top: 0;
-      left: calc(100% - 4px);
+      left: 100%;
     }
   }
 
   &__menu {
-    @apply rounded-md p-1.5 z-100 absolute;
+    @apply rounded-md py-1.5 px-2 z-100 absolute;
     @extend %blurred-bg;
     
     &::before {
@@ -39,7 +39,7 @@
     &--divided {
         @apply mt-4;
       &::before {
-        @apply mx-auto bg-white/15 h-1px top--2 w-[90%] content-[''] absolute block;
+        @apply mx-auto bg-white/15 h-1px top--2 right-0.5 left-0.5 content-[''] absolute block;
       }
     }
   }

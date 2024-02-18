@@ -1,16 +1,5 @@
 import './index.scss';
-
-export enum EDropDownMenuPosition {
-  TOP = 'top',
-  LEFT = 'left',
-  RIGHT = 'right',
-  BOTTOM = 'bottom',
-}
-
-export enum EDropDownTrigger {
-  CLICK = 'click',
-  HOVER = 'hover',
-}
+import { EDropDownMenuPosition, EDropDownTrigger } from './types';
 
 export default defineComponent({
   props: {
