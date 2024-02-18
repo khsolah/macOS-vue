@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <Bar />
+    <MenuBar />
     <Desktop />
   </div>
 </template>
