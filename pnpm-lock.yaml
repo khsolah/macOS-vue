@@ -11,6 +11,9 @@ devDependencies:
   '@commitlint/config-conventional':
     specifier: ^18.4.4
     version: 18.4.4
+  '@iconify-json/fontisto':
+    specifier: ^1.1.8
+    version: 1.1.8
   '@iconify-json/mdi':
     specifier: ^1.1.64
     version: 1.1.64
@@ -939,6 +942,12 @@ packages:
 
   /@humanwhocodes/object-schema@2.0.2:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
+    dev: true
+
+  /@iconify-json/fontisto@1.1.8:
+    resolution: {integrity: sha512-g5J2kISh/fErQLXrk3ZV5pD9gKr1lZPRQ+sWh3HygO7G2eIxxXP8UlnjxvvGjCCaK9ZD0uLmPFB2Bdd1a2QVng==}
+    dependencies:
+      '@iconify/types': 2.0.0
     dev: true
 
   /@iconify-json/mdi@1.1.64:
