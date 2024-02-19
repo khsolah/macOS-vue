@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { useDateFormat, useNow } from '@vueuse/core';
-import MenuBarHocDropDownList from '~/components/MenuBar/Hoc/DropDownList';
-import DropDownList from '~/components/DropDown/List.vue';
 import {
   EShortcutIcon,
   EDropDownMenuPosition,
   EDropDownTrigger,
-  type TDropDownList,
+  type TDropDownMenu,
 } from '~/components/DropDown/types';
 import { useMenuBarStore } from '~/store/MenuBar';
-
-const List = MenuBarHocDropDownList(DropDownList);
 
 const datetime = useDateFormat(useNow(), 'ddd MMM DD h:mm A', {
   locales: 'en-US',
@@ -22,7 +18,7 @@ onClickOutside(listEl, () => {
   menuBarStore.handleBlur();
 });
 
-const recentItems = {
+const recentItemsMenu = {
   label: 'Recent Items',
   name: 'RecentItems',
   position: EDropDownMenuPosition.RIGHT,
@@ -35,7 +31,7 @@ const recentItems = {
     { name: 'ClearMenu', label: 'Clear Menu', divided: true },
   ],
 };
-const appleList: TDropDownList = {
+const appleMenu: TDropDownMenu = {
   label: '',
   name: 'Apple',
   item: [
@@ -46,7 +42,7 @@ const appleList: TDropDownList = {
       name: 'RecentItems',
       label: 'Recent Items',
       divided: true,
-      subList: recentItems,
+      subMenu: recentItemsMenu,
     },
     {
       name: 'ForceQuit',
@@ -89,7 +85,7 @@ const appleList: TDropDownList = {
       @click="menuBarStore.handleBlur"
     >
       <li>
-        <List :list="appleList">
+        <MenuBarDropDownMenu :menu="appleMenu">
           <template #btn>
             <button
               class="menubar__btn"
@@ -103,7 +99,7 @@ const appleList: TDropDownList = {
           </template>
 
           <template #RecentItems>
-            <List :list="recentItems" :is-sub-list="true">
+            <MenuBarDropDownMenu :menu="recentItemsMenu" :is-sub-menu="true">
               <template #Applications>
                 <span class="text-xs mb-1">Applications</span>
               </template>
@@ -123,9 +119,9 @@ const appleList: TDropDownList = {
               <template #Servers>
                 <span class="text-xs">Servers</span>
               </template>
-            </List>
+            </MenuBarDropDownMenu>
           </template>
-        </List>
+        </MenuBarDropDownMenu>
       </li>
     </ul>
 

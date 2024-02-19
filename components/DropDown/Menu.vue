@@ -1,32 +1,30 @@
 <script setup lang="ts">
-import type { TDropDownList } from './types';
+import type { TDropDownMenu } from './types';
 
 const props = defineProps<{
-  list: TDropDownList;
-  isSubList?: boolean;
-  handleClick?: (event: MouseEvent) => void;
-  handleMouseEnter?: (event: MouseEvent) => void;
+  menu: TDropDownMenu;
+  isSubMenu?: boolean;
 }>();
 const hasShortcuts = computed(() =>
-  props.list.item.some((item) => !!item.shortcuts),
+  props.menu.item.some((item) => !!item.shortcuts),
 );
 </script>
 
 <template>
-  <DropDown :position="props.list.position" :trigger="props.list.trigger">
-    <slot name="btn" :list="props.list" :is-sub-list="props.isSubList" />
+  <DropDown :position="props.menu.position" :trigger="props.menu.trigger">
+    <slot name="btn" :menu="props.menu" :is-sub-menu="props.isSubMenu" />
 
     <template #dropdown>
-      <DropDownMenu>
+      <DropDownList>
         <DropDownItem
-          v-for="item in props.list.item"
+          v-for="item in props.menu.item"
           :key="item.name"
           :divided="item.divided"
           :disabled="item.disabled"
         >
           <slot :name="item.name" :item="item">
-            <template v-if="item.subList">
-              <DropDownList :list="item.subList" :is-sub-list="true">
+            <template v-if="item.subMenu">
+              <DropDownMenu :menu="item.subMenu" :is-sub-menu="true">
                 <template #btn>
                   <div class="w-full flex items-center">
                     <i
@@ -43,7 +41,7 @@ const hasShortcuts = computed(() =>
                     />
                   </div>
                 </template>
-              </DropDownList>
+              </DropDownMenu>
             </template>
 
             <template v-else>
@@ -72,7 +70,7 @@ const hasShortcuts = computed(() =>
             </template>
           </slot>
         </DropDownItem>
-      </DropDownMenu>
+      </DropDownList>
     </template>
   </DropDown>
 </template>

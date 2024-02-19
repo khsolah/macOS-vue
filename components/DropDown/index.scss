@@ -20,7 +20,7 @@
     }
   }
 
-  &__menu {
+  &__list {
     @apply rounded-md py-1.5 px-2 z-100 absolute;
     @extend %blurred-bg;
     

@@ -29,10 +29,10 @@ export type TDropDownItem = {
   disabled?: boolean;
   divided?: boolean;
   // eslint-disable-next-line no-use-before-define
-  subList?: TDropDownList;
+  subMenu?: TDropDownMenu;
 };
 
-export type TDropDownList = {
+export type TDropDownMenu = {
   position?: EDropDownMenuPosition;
   trigger?: EDropDownTrigger;
   label: string;
