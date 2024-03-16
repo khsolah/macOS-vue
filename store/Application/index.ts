@@ -13,7 +13,9 @@ const COMPONENT = {
   ),
   [EApplication.SAFARI]: null,
   [EApplication.GITHUB]: null,
-  [EApplication.FINDER]: null,
+  [EApplication.FINDER]: defineAsyncComponent(
+    () => import('~/components/Application/Finder/index.vue'),
+  ),
 };
 
 const generateId = () =>

@@ -19,27 +19,30 @@ const props = defineProps<{
     minimize?: TNavOption;
     fullscreen?: TNavOption;
   };
+  handleEl?: HTMLElement;
 }>();
 const emit = defineEmits<{
   (e: 'close'): void;
 }>();
 
-const app = ref<HTMLElement>();
-const { style } = useDraggable(app, {
-  initialValue: () => {
-    if (process.server)
-      return {
-        x: 0,
-        y: 0,
-      };
+const wrapperEl = ref<HTMLElement>();
+const draggableData = reactive(
+  useDraggable(wrapperEl, {
+    initialValue: () => {
+      if (process.server)
+        return {
+          x: 0,
+          y: 0,
+        };
 
-    const windowSize = useWindowSize();
-    return {
-      x: props.left ?? (windowSize.width.value - (props.width ?? 0)) / 2,
-      y: props.top ?? (windowSize.height.value - (props.height ?? 0)) / 2,
-    };
-  },
-});
+      return {
+        x: props.left ?? (window.innerWidth - (props.width ?? 0)) / 2,
+        y: props.top ?? (window.innerHeight - (props.height ?? 0)) / 2,
+      };
+    },
+    handle: () => props.handleEl ?? wrapperEl.value,
+  }),
+);
 
 const zIndex = ref(props.zIndex);
 const close = () => {
@@ -56,9 +59,9 @@ const isFocusing = computed(() => applicationStore.focusing === props.id);
 
 <template>
   <div
-    ref="app"
+    ref="wrapperEl"
     class="app"
-    :style="[style, `z-index:${zIndex}`]"
+    :style="[draggableData.style, `z-index:${zIndex}`]"
     @mousedown="handleFocus"
   >
     <!-- buttons -->
